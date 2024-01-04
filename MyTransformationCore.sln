@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTransformationCore.Tests", "MyTransformationCore.Tests\MyTransformationCore.Tests.csproj", "{A3C93F50-8669-4CD2-A758-B0C496A5D291}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTransformationCore.Web", "MyTransformationCore.Web\MyTransformationCore.Web.csproj", "{06132617-8D05-4C87-B02E-06E86EF39CB2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3C93F50-8669-4CD2-A758-B0C496A5D291}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3C93F50-8669-4CD2-A758-B0C496A5D291}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3C93F50-8669-4CD2-A758-B0C496A5D291}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3C93F50-8669-4CD2-A758-B0C496A5D291}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06132617-8D05-4C87-B02E-06E86EF39CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06132617-8D05-4C87-B02E-06E86EF39CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06132617-8D05-4C87-B02E-06E86EF39CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06132617-8D05-4C87-B02E-06E86EF39CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
