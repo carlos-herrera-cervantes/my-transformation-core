@@ -1,0 +1,26 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+
+namespace MyTransformationCore.Domain.Models;
+
+public class Exercise
+{
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    [BsonElement("_id")]
+    [JsonProperty("id")]
+    public string Id { get; set; }
+
+    [BsonElement("name")]
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [BsonElement("image")]
+    [JsonProperty("image")]
+    public string Image { get; set; }
+
+    [BsonElement("muscle_groups")]
+    [JsonProperty("muscle_groups")]
+    public string MuscleGroups { get; set; }
+}
