@@ -28,4 +28,14 @@ public class User
     [BsonElement("profile_picture")]
     [JsonProperty("profile_picture")]
     public string ProfilePicture { get; set; }
+
+    [BsonRepresentation(BsonType.DateTime)]
+    [BsonElement("created_at")]
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonRepresentation(BsonType.DateTime)]
+    [BsonElement("updated_at")]
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

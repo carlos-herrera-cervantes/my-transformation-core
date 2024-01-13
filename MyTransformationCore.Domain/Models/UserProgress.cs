@@ -22,12 +22,22 @@ public class UserProgress
     [JsonProperty("exercise_id")]
     public string ExerciseId { get; set; }
 
-    [BsonElement("weight")]
-    [JsonProperty("weight")]
-    public int Weight { get; set; }
+    [BsonElement("weight_in_kilos")]
+    [JsonProperty("weight_in_kilos")]
+    public int WeightInKilos { get; set; }
 
     [BsonRepresentation(BsonType.DateTime)]
     [BsonElement("moment")]
     [JsonProperty("moment")]
     public DateTime Moment { get; set; }
+
+    [BsonRepresentation(BsonType.DateTime)]
+    [BsonElement("created_at")]
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonRepresentation(BsonType.DateTime)]
+    [BsonElement("updated_at")]
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

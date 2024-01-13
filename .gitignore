@@ -26,3 +26,4 @@ obj/
 Properties/
 bin/
 appsettings.*
+.env

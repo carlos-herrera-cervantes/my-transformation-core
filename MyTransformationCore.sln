@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTransformationCore.Web", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTransformationCore.Domain", "MyTransformationCore.Domain\MyTransformationCore.Domain.csproj", "{029629F3-DC16-46A5-A425-B0B21533E71D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTransformationCore.Repository", "MyTransformationCore.Repository\MyTransformationCore.Repository.csproj", "{65AC0E2E-F75D-4ECB-A003-DE32FA97C9F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{029629F3-DC16-46A5-A425-B0B21533E71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{029629F3-DC16-46A5-A425-B0B21533E71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{029629F3-DC16-46A5-A425-B0B21533E71D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65AC0E2E-F75D-4ECB-A003-DE32FA97C9F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65AC0E2E-F75D-4ECB-A003-DE32FA97C9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65AC0E2E-F75D-4ECB-A003-DE32FA97C9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65AC0E2E-F75D-4ECB-A003-DE32FA97C9F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
