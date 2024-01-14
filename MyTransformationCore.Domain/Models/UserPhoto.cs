@@ -25,4 +25,14 @@ public class UserPhoto
     [BsonElement("moment")]
     [JsonProperty("moment")]
     public DateTime Moment { get; set; }
+
+    [BsonRepresentation(BsonType.DateTime)]
+    [BsonElement("created_at")]
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonRepresentation(BsonType.DateTime)]
+    [BsonElement("updated_at")]
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
