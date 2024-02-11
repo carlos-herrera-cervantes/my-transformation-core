@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace MyTransformationCore.Repository.Repositories;
 
-public class UserRepository(IMongoClient mongoClient)
+public class UserRepository(IMongoClient mongoClient) : IUserRepository
 {
     #region snippet_Properties
 

@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace MyTransformationCore.Repository.Managers;
 
-public class UserPhotoManager(IMongoClient mongoClient)
+public class UserPhotoManager(IMongoClient mongoClient) : IUserPhotoManager
 {
     #region snippet_Properties
 

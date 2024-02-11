@@ -32,12 +32,12 @@ public class UserProgressManagerTests
         {
             UserId = "65a2dc1cd99fab3b2e0646a7",
             ExerciseId = "65a2dc24b7a8fbf56f8fe4de",
-            WeightInKilos = 10,
+            Weight = 10,
             Moment = DateTime.UtcNow
         });
 
         UserProgress userProgress = await userProgressRepository.GetAsync(Builders<UserProgress>.Filter.Eq(up => up.UserId, "65a2dc1cd99fab3b2e0646a7"));
-        userProgress.WeightInKilos = 15;
+        userProgress.Weight = 15;
 
         await userProgressManager.UpdateAsync(Builders<UserProgress>.Filter.Eq(up => up.UserId, "65a2dc1cd99fab3b2e0646a7"), userProgress);
         await userProgressManager.DeleteAsync(Builders<UserProgress>.Filter.Eq(up => up.UserId, "65a2dc1cd99fab3b2e0646a7"));
