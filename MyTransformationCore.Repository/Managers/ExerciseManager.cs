@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace MyTransformationCore.Repository.Managers;
 
-public class ExerciseManager(IMongoClient mongoClient)
+public class ExerciseManager(IMongoClient mongoClient) : IExerciseManager
 {
     #region snippet_Properties
 

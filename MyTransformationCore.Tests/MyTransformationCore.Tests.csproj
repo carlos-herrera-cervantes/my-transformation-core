@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MyTransformationCore.Repository\MyTransformationCore.Repository.csproj" />
     <ProjectReference Include="..\MyTransformationCore.Domain\MyTransformationCore.Domain.csproj" />
+    <ProjectReference Include="..\MyTransformationCore.Web\MyTransformationCore.Web.csproj" />
   </ItemGroup>
 
 </Project>
