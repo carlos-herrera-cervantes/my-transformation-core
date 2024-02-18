@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.305.24" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyTransformationCore.Domain\MyTransformationCore.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

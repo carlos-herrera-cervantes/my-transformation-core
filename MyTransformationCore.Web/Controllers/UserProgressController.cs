@@ -47,7 +47,10 @@ public class UserProgressController(IUserProgressRepository userProgressReposito
             UserId = userId,
             ExerciseId = userProgressCreation.ExerciseId,
             Weight = userProgressCreation.Weight,
-            Moment = userProgressCreation.Moment
+            MeasurementUnit = userProgressCreation.MeasurementUnit,
+            Moment = userProgressCreation.Moment,
+            Reps = userProgressCreation.Reps,
+            Comment = userProgressCreation.Comment
         };
         await _userProgressManager.CreateAsync(userProgress);
 
@@ -66,6 +69,9 @@ public class UserProgressController(IUserProgressRepository userProgressReposito
         userProgress.ExerciseId ??= userProgressUpdate.ExerciseId;
         userProgress.Weight ??= userProgressUpdate.Weight;
         userProgress.Moment ??= userProgressUpdate.Moment;
+        userProgress.MeasurementUnit ??= userProgressUpdate.MeasurementUnit;
+        userProgress.Reps ??= userProgressUpdate.Reps;
+        userProgress.Comment ??= userProgressUpdate.Comment;
 
         await _userProgressManager.UpdateAsync(Builders<UserProgress>.Filter.And(userIdMatch, idMatch), userProgress);
 

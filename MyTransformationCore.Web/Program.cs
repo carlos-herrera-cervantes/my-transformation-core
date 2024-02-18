@@ -1,11 +1,13 @@
 using MyTransformationCore.Repository.Managers;
 using MyTransformationCore.Repository.Repositories;
+using MyTransformationCore.Services.Aws;
 using MyTransformationCore.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddMongoDbClient();
+builder.Services.AddS3Client();
 builder.Services.AddSingleton<IExerciseRepository, ExerciseRepository>();
 builder.Services.AddSingleton<IExerciseManager, ExerciseManager>();
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
@@ -14,6 +16,7 @@ builder.Services.AddSingleton<IUserPhotoRepository, UserPhotoRepository>();
 builder.Services.AddSingleton<IUserPhotoManager, UserPhotoManager>();
 builder.Services.AddSingleton<IUserProgressRepository, UserProgressRepository>();
 builder.Services.AddSingleton<IUserProgressManager, UserProgressManager>();
+builder.Services.AddSingleton<IS3Service, S3Service>();
 
 var app = builder.Build();
 

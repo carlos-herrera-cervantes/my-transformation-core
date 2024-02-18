@@ -7,6 +7,8 @@ using MyTransformationCore.Repository.Managers;
 using MyTransformationCore.Repository.Repositories;
 using MyTransformationCore.Web.Controllers;
 using MyTransformationCore.Domain.Models;
+using MyTransformationCore.Services.Aws;
+using MyTransformationCore.Domain.Configs;
 
 using Moq;
 using MongoDB.Driver;
@@ -25,6 +27,8 @@ public class UserPhotoControllerTests
 
     private readonly Mock<IFormFile> _mockFormFile = new();
 
+    private readonly Mock<IS3Service> _mockS3Service = new();
+
     #endregion
 
     #region snippet_Tests
@@ -36,7 +40,7 @@ public class UserPhotoControllerTests
             Setup(upr => upr.GetAllAsync(It.IsAny<FilterDefinition<UserPhoto>>())).
             ReturnsAsync([]);
 
-        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object);
+        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object, _mockS3Service.Object);
         IActionResult httpResponse = await userPhotoController.GetMeAsync(userId: "65b7fe35a24e34af76de5884");
 
         _mockUserPhotoRepository.Verify(upr => upr.GetAllAsync(It.IsAny<FilterDefinition<UserPhoto>>()), Times.Once);
@@ -51,8 +55,14 @@ public class UserPhotoControllerTests
             Setup(upm => upm.CreateAsync(It.IsAny<UserPhoto>())).
             Returns(Task.CompletedTask);
         _mockFormFile.Setup(ff => ff.FileName).Returns("profile.png");
+        _mockS3Service
+            .Setup(s3s => s3s.PutObjectAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()))
+            .ReturnsAsync((string filename, string rootPath, Stream stream) =>
+            {
+                return $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{rootPath}/{filename}";
+            });
 
-        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object);
+        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object, _mockS3Service.Object);
         IActionResult httpResponse = await userPhotoController.CreateMeAsync(
             userId: "65b7fe35a24e34af76de5884",
             userPhotoCreation: new UserPhotoCreation{
@@ -61,26 +71,25 @@ public class UserPhotoControllerTests
         );
 
         _mockUserPhotoManager.Verify(upm => upm.CreateAsync(It.IsAny<UserPhoto>()), Times.Once);
-        _mockFormFile.Verify(ff => ff.FileName, Times.Once);
-
+        _mockFormFile.Verify(ff => ff.FileName, Times.Exactly(2));
+        _mockS3Service.Verify(s3s => s3s.PutObjectAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()), Times.Once);
         Assert.IsType<CreatedResult>(httpResponse);
     }
 
     [Fact(DisplayName = "Should return 404 status code")]
     public async Task DeleteMeAsyncShouldReturn404()
     {
-        _mockUserPhotoRepository.
-            Setup(upr => upr.GetAsync(It.IsAny<FilterDefinition<UserPhoto>>()))
+        _mockUserPhotoRepository
+            .Setup(upr => upr.GetAsync(It.IsAny<FilterDefinition<UserPhoto>>()))
             .ReturnsAsync(() => null);
 
-        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object);
+        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object, _mockS3Service.Object);
         IActionResult httpResponse = await userPhotoController.DeleteMeAsync(
             userId: "65b7fe35a24e34af76de5884",
             id: "65b9bbd7383c0c0db4796076"
         );
 
         _mockUserPhotoRepository.Verify(upr => upr.GetAsync(It.IsAny<FilterDefinition<UserPhoto>>()), Times.Once);
-
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
@@ -93,8 +102,9 @@ public class UserPhotoControllerTests
         _mockUserPhotoManager
             .Setup(upm => upm.DeleteAsync(It.IsAny<FilterDefinition<UserPhoto>>()))
             .Returns(Task.CompletedTask);
+        _mockS3Service.Setup(s3s => s3s.DeleteObjectAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
 
-        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object);
+        var userPhotoController = new UserPhotoController(_mockUserPhotoRepository.Object, _mockUserPhotoManager.Object, _mockS3Service.Object);
         IActionResult httpResponse = await userPhotoController.DeleteMeAsync(
             userId: "65b7fe35a24e34af76de5884",
             id: "65b9bbd7383c0c0db4796076"
@@ -102,7 +112,7 @@ public class UserPhotoControllerTests
 
         _mockUserPhotoRepository.Verify(upr => upr.GetAsync(It.IsAny<FilterDefinition<UserPhoto>>()), Times.Once);
         _mockUserPhotoManager.Verify(upm => upm.DeleteAsync(It.IsAny<FilterDefinition<UserPhoto>>()), Times.Once);
-
+        _mockS3Service.Verify(s3s => s3s.DeleteObjectAsync(It.IsAny<string>()), Times.Once);
         Assert.IsType<NoContentResult>(httpResponse);
     }
 
