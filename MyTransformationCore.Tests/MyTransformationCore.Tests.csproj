@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.305.24" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
     <PackageReference Include="Moq" Version="4.20.70" />
@@ -28,6 +29,7 @@
     <ProjectReference Include="..\MyTransformationCore.Repository\MyTransformationCore.Repository.csproj" />
     <ProjectReference Include="..\MyTransformationCore.Domain\MyTransformationCore.Domain.csproj" />
     <ProjectReference Include="..\MyTransformationCore.Web\MyTransformationCore.Web.csproj" />
+    <ProjectReference Include="..\MyTransformationCore.Services\MyTransformationCoreServices.csproj" />
   </ItemGroup>
 
 </Project>

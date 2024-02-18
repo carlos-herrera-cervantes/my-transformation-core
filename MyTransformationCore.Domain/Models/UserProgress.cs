@@ -32,6 +32,14 @@ public class UserProgress
     [JsonProperty(nameof(MeasurementUnit))]
     public string MeasurementUnit { get; set; }
 
+    [BsonElement("reps")]
+    [JsonProperty(nameof(Reps))]
+    public int? Reps { get; set; }
+
+    [BsonElement("comment")]
+    [JsonProperty(nameof(Comment))]
+    public string Comment { get; set; }
+
     [BsonRepresentation(BsonType.DateTime)]
     [BsonElement("moment")]
     [JsonProperty(nameof(Moment))]
@@ -63,6 +71,13 @@ public class UserProgressCreation
     public string MeasurementUnit { get; set; }
 
     [Required]
+    [JsonProperty(nameof(Reps))]
+    public int Reps { get; set; }
+
+    [JsonProperty(nameof(Comment))]
+    public string Comment { get; set; }
+
+    [Required]
     [JsonProperty(nameof(Moment))]
     public DateTime Moment { get; set; }
 }
@@ -73,10 +88,16 @@ public class UserProgressUpdate
     public string ExerciseId { get; set; }
 
     [JsonProperty(nameof(Weight))]
-    public int? Weight { get; set; }
+    public int Weight { get; set; }
 
     [JsonProperty(nameof(MeasurementUnit))]
     public string MeasurementUnit { get; set; }
+
+    [JsonProperty(nameof(Reps))]
+    public int Reps { get; set; }
+
+    [JsonProperty(nameof(Comment))]
+    public string Comment { get; set; }
 
     [JsonProperty(nameof(Moment))]
     public DateTime? Moment { get; set; }
