@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
+using MyTransformationCore.Domain.Configs;
+
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -36,6 +38,18 @@ public class Exercise
     [BsonElement("updated_at")]
     [JsonProperty(nameof(UpdatedAt))]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// Try to set the full image path to the S3 bucket path.
+    /// If the image path is a fallback image, it will be set to the default host.
+    /// </summary>
+    public void TrySetFullImagePath()
+    {
+        bool fallbackImage = this.Image.StartsWith("/images");
+        this.Image = fallbackImage ?
+            $"{ApiConfig.DefaultHost}{this.Image}" :
+            $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{this.Image}";
+    }
 }
 
 public class ExerciseCreation
@@ -43,7 +57,6 @@ public class ExerciseCreation
     [Required]
     public string Name { get; set; }
 
-    [Required]
     public IFormFile Image { get; set; }
 
     [Required]

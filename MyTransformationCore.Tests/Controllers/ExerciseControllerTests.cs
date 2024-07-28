@@ -63,12 +63,15 @@ public class ExerciseControllerTests
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
-    [Fact(DisplayName = "Should return 200 status code")]
+    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(ExerciseControllerTests.GetAsyncShouldReturn200)} - Should return 200 status code")]
     public async Task GetAsyncShouldReturn200()
     {
         _mockExerciseRepository
             .Setup(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()))
-            .ReturnsAsync(new Exercise());
+            .ReturnsAsync(new Exercise
+            {
+                Image = "/images/exercises/default.png"
+            });
 
         var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
         IActionResult httpResponse = await exerciseController.GetAsync(id: "65ac120d41738783ecbb25ac");
