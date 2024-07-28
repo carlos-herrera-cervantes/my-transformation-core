@@ -20,6 +20,7 @@ builder.Services.AddSingleton<IS3Service, S3Service>();
 
 var app = builder.Build();
 
+app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
 app.Run();

@@ -32,7 +32,7 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
         IEnumerable<Exercise> documents = await _exerciseRepository.GetAllAsync(Builders<Exercise>.Filter.Empty);
         var exercises = documents.Select(d =>
         {
-            d.Image = $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{d.Image}";
+            d.TrySetFullImagePath();
             return d;
         });
 
@@ -46,7 +46,7 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
         
         if (exercise is null) return NotFound(new { Message = "Exercise not found" });
 
-        exercise.Image = $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{exercise.Image}";
+        exercise.TrySetFullImagePath();
 
         return Ok(exercise);
     }
@@ -55,13 +55,18 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
     [RequestSizeLimit(2_000_000)]
     public async Task<IActionResult> CreateAsync([FromForm] ExerciseCreation exerciseCreation)
     {
-        var imageStream = exerciseCreation.Image.OpenReadStream();
-        string imagePath = await _s3Service.PutObjectAsync(filename: exerciseCreation.Image.FileName, rootPath: "exercises", stream: imageStream);
+        string imagePath = $"{ApiConfig.DefaultHost}{AssetsConfig.FallbackExeriseImage}";
+
+        if (exerciseCreation.Image is not null)
+        {
+            var imageStream = exerciseCreation.Image.OpenReadStream();
+            imagePath = await _s3Service.PutObjectAsync(filename: exerciseCreation.Image.FileName, rootPath: "exercises", stream: imageStream);
+        }
 
         var exercise = new Exercise
         {
             Name = exerciseCreation.Name,
-            Image = $"exercises/{exerciseCreation.Image.FileName}",
+            Image = exerciseCreation.Image is not null ? $"exercises/{exerciseCreation.Image.FileName}" : AssetsConfig.FallbackExeriseImage,
             MuscleGroups = exerciseCreation.MuscleGroups
         };
 
