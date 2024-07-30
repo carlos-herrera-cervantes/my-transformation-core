@@ -50,6 +50,14 @@ public class Exercise
             $"{ApiConfig.DefaultHost}{this.Image}" :
             $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{this.Image}";
     }
+
+    /// <summary>
+    /// Check if the image is a fallback image.
+    /// </summary>
+    public bool FallbackImage()
+    {
+        return this.Image.StartsWith("/images");
+    }
 }
 
 public class ExerciseCreation
