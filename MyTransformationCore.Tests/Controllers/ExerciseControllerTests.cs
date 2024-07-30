@@ -121,12 +121,15 @@ public class ExerciseControllerTests
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
-    [Fact(DisplayName = "Should return 200 status code")]
+    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(ExerciseControllerTests.UpdateAsyncShouldReturn200)} - Should return 200 status code")]
     public async Task UpdateAsyncShouldReturn200()
     {
         _mockExerciseRepository
             .Setup(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()))
-            .ReturnsAsync(() => new Exercise());
+            .ReturnsAsync(() => new Exercise
+            {
+                Image = "/exercises"
+            });
         _mockExerciseManager
             .Setup(em => em.UpdateAsync(It.IsAny<FilterDefinition<Exercise>>(), It.IsAny<Exercise>()))
             .Returns(Task.CompletedTask);
@@ -168,12 +171,15 @@ public class ExerciseControllerTests
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
-    [Fact(DisplayName = "Should return 204 status code")]
+    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(ExerciseControllerTests.DeleteAsyncShouldReturn204)} - Should return 204 status code")]
     public async Task DeleteAsyncShouldReturn204()
     {
         _mockExerciseRepository
             .Setup(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()))
-            .ReturnsAsync(new Exercise());
+            .ReturnsAsync(new Exercise
+            {
+                Image = "/exercises"
+            });
         _mockExerciseManager
             .Setup(em => em.DeleteAsync(It.IsAny<FilterDefinition<Exercise>>()))
             .Returns(Task.CompletedTask);

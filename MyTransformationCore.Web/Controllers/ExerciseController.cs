@@ -85,16 +85,19 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
 
         if (exercise is null) return NotFound(new { Message = "Exercise not found" });
 
-        var imageStream = exerciseUpdate.Image.OpenReadStream();
-        var imagePath = await _s3Service.PutObjectAsync(filename: exerciseUpdate.Image.FileName, rootPath: "exercises", stream: imageStream);
+        if (exerciseUpdate.Image is not null && !exercise.FallbackImage())
+        {
+            var imageStream = exerciseUpdate.Image.OpenReadStream();
+            await _s3Service.PutObjectAsync(filename: exerciseUpdate.Image.FileName, rootPath: "exercises", stream: imageStream);
+            exercise.Image = $"exercises/{exerciseUpdate.Image.FileName}";
+        }
 
-        exercise.Image ??= $"exercises/{exerciseUpdate.Image?.FileName}";
-        exercise.Name ??= exerciseUpdate.Name;
-        exercise.MuscleGroups ??= exerciseUpdate.MuscleGroups;
+        exercise.Name = exerciseUpdate.Name ?? exercise.Name;
+        exercise.MuscleGroups = exerciseUpdate.MuscleGroups ?? exercise.MuscleGroups;
 
         await _exerciseManager.UpdateAsync(Builders<Exercise>.Filter.Eq(e => e.Id, id), exercise);
 
-        exercise.Image = imagePath;
+        exercise.TrySetFullImagePath();
 
         return Ok(exercise);
     }
@@ -106,7 +109,11 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
 
         if (exercise is null) return NotFound(new { Message = "Exercise not found" });
 
-        await _s3Service.DeleteObjectAsync(filename: exercise.Image);
+        if (!exercise.FallbackImage())
+        {
+            await _s3Service.DeleteObjectAsync(filename: exercise.Image);
+        }
+
         await _exerciseManager.DeleteAsync(Builders<Exercise>.Filter.Eq(e => e.Id, id));
 
         return NoContent();
