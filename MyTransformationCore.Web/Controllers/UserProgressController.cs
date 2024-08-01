@@ -66,12 +66,7 @@ public class UserProgressController(IUserProgressRepository userProgressReposito
 
         if (userProgress is null) return NotFound(new { Message = "User progress not found" });
 
-        userProgress.ExerciseId ??= userProgressUpdate.ExerciseId;
-        userProgress.Weight ??= userProgressUpdate.Weight;
-        userProgress.Moment ??= userProgressUpdate.Moment;
-        userProgress.MeasurementUnit ??= userProgressUpdate.MeasurementUnit;
-        userProgress.Reps ??= userProgressUpdate.Reps;
-        userProgress.Comment ??= userProgressUpdate.Comment;
+        userProgress.MapUpdates(userProgressUpdate);
 
         await _userProgressManager.UpdateAsync(Builders<UserProgress>.Filter.And(userIdMatch, idMatch), userProgress);
 

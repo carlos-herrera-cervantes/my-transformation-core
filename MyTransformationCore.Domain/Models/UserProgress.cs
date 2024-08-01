@@ -26,7 +26,7 @@ public class UserProgress
 
     [BsonElement("weight")]
     [JsonProperty(nameof(Weight))]
-    public int? Weight { get; set; }
+    public int Weight { get; set; }
 
     [BsonElement("measurement_unit")]
     [JsonProperty(nameof(MeasurementUnit))]
@@ -54,6 +54,20 @@ public class UserProgress
     [BsonElement("updated_at")]
     [JsonProperty(nameof(UpdatedAt))]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// This method takes a UserProgressUpdate object and maps its properties to the UserProgress object.
+    /// </summary>
+    /// <param name="userProgressUpdate"></param>
+    public void MapUpdates(UserProgressUpdate userProgressUpdate)
+    {
+        this.ExerciseId = userProgressUpdate.ExerciseId ?? this.ExerciseId;
+        this.Weight = userProgressUpdate.Weight ?? this.Weight;
+        this.Moment = userProgressUpdate.Moment ?? this.Moment;
+        this.MeasurementUnit = userProgressUpdate.MeasurementUnit ?? this.MeasurementUnit;
+        this.Reps = userProgressUpdate.Reps ?? this.Reps;
+        this.Comment = userProgressUpdate.Comment ?? this.Comment;
+    }
 }
 
 public class UserProgressCreation
@@ -88,13 +102,13 @@ public class UserProgressUpdate
     public string ExerciseId { get; set; }
 
     [JsonProperty(nameof(Weight))]
-    public int Weight { get; set; }
+    public int? Weight { get; set; }
 
     [JsonProperty(nameof(MeasurementUnit))]
     public string MeasurementUnit { get; set; }
 
     [JsonProperty(nameof(Reps))]
-    public int Reps { get; set; }
+    public int? Reps { get; set; }
 
     [JsonProperty(nameof(Comment))]
     public string Comment { get; set; }
