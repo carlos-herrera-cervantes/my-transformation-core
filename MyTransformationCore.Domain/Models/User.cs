@@ -40,6 +40,17 @@ public class User
     [BsonElement("updated_at")]
     [JsonProperty(nameof(UpdatedAt))]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// This method takes a UserUpdate object and maps its properties to the User object.
+    /// </summary>
+    /// <param name="userUpdate"></param>
+    public void MapUpdates(UserUpdate userUpdate)
+    {
+        this.FirstName = userUpdate.FirstName ?? this.FirstName;
+        this.LastName = userUpdate.LastName ?? this.LastName;
+        this.Birthdate = userUpdate.Birthdate ?? this.Birthdate;
+    }
 }
 
 public class UserUpdate
