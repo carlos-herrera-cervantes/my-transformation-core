@@ -25,9 +25,9 @@ public class UserController(IUserRepository userRepository, IUserManager userMan
     #region snippet_Methods
 
     [HttpGet("me")]
-    public async Task<IActionResult> GetMeAsync([FromHeader(Name = "user-id")] string id)
+    public async Task<IActionResult> GetMeAsync([FromHeader(Name = "user-email")] string email)
     {
-        User user = await _userRepository.GetAsync(Builders<User>.Filter.Eq(u => u.Id, id));
+        User user = await _userRepository.GetAsync(Builders<User>.Filter.Eq(u => u.Email, email));
 
         if (user is null) return NotFound(new { Message = "No profile exists" });
 
