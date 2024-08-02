@@ -22,6 +22,10 @@ public class User
     [JsonProperty(nameof(LastName))]
     public string LastName { get; set; }
 
+    [BsonElement("email")]
+    [JsonProperty(nameof(Email))]
+    public string Email { get; set; }
+
     [BsonRepresentation(BsonType.DateTime)]
     [BsonElement("birthdate")]
     [JsonProperty(nameof(Birthdate))]

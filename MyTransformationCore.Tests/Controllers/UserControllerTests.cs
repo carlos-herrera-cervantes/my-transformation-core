@@ -34,7 +34,7 @@ public class UserControllerTests
             ReturnsAsync(() => null);
 
         var userController = new UserController(_mockUserRepository.Object, _mockUserManager.Object);
-        IActionResult httpResponse = await userController.GetMeAsync(id: "65adacf56ba4b4b7f4723618");
+        IActionResult httpResponse = await userController.GetMeAsync(email: "65adacf56ba4b4b7f4723618");
 
         _mockUserRepository.Verify(ur => ur.GetAsync(It.IsAny<FilterDefinition<User>>()), Times.Once);
 
@@ -49,7 +49,7 @@ public class UserControllerTests
             ReturnsAsync(new User());
 
         var userController = new UserController(_mockUserRepository.Object, _mockUserManager.Object);
-        IActionResult httpResponse = await userController.GetMeAsync(id: "65adacf56ba4b4b7f4723618");
+        IActionResult httpResponse = await userController.GetMeAsync(email: "65adacf56ba4b4b7f4723618");
 
         _mockUserRepository.Verify(ur => ur.GetAsync(It.IsAny<FilterDefinition<User>>()), Times.Once);
 
