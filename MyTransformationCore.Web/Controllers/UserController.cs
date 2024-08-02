@@ -44,16 +44,13 @@ public class UserController(IUserRepository userRepository, IUserManager userMan
     }
 
     [HttpPatch("me")]
-    public async Task<IActionResult> UpdateMeAsync([FromHeader(Name = "user-id")] string id, [FromForm] UserUpdate userUpdate)
+    public async Task<IActionResult> UpdateMeAsync([FromHeader(Name = "user-id")] string id, [FromBody] UserUpdate userUpdate)
     {
         User user = await _userRepository.GetAsync(Builders<User>.Filter.Eq(u => u.Id, id));
 
         if (user is null) return NotFound(new { Message = "No profile exists" });
 
-        user.ProfilePicture ??= userUpdate.ProfilePicture?.FileName;
-        user.FirstName ??= userUpdate.FirstName;
-        user.LastName ??= userUpdate.LastName;
-        user.Birthdate ??= userUpdate.Birthdate;
+        user.MapUpdates(userUpdate);
 
         await _userManager.UpdateAsync(Builders<User>.Filter.Eq(u => u.Id, id), user);
 
