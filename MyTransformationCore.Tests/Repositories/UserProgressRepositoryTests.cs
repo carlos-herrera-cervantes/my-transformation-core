@@ -25,7 +25,8 @@ public class UserProgressRepositoryTests
     public async Task GetAllAsyncShouldReturnEmptyList()
     {
         var userProgressRepository = new UserProgressRepository(_mongoClient);
-        IEnumerable<UserProgress> progress = await userProgressRepository.GetAllAsync(Builders<UserProgress>.Filter.Eq(up => up.ExerciseId, "65a2e22af773a5ce93afbd59"));
+        var filter = Builders<UserProgress>.Filter.Eq(up => up.ExerciseId, "65a2e22af773a5ce93afbd59");
+        IEnumerable<UserProgress> progress = await userProgressRepository.GetAllAsync(filter, new Pageable());
         Assert.Empty(progress);
     }
 

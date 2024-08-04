@@ -30,14 +30,14 @@ public class UserProgressControllerTests
     public async Task GetAllMeAsyncShouldReturn200()
     {
         _mockUserProgressRepository
-            .Setup(upr => upr.GetAllAsync(It.IsAny<FilterDefinition<UserProgress>>()))
+            .Setup(upr => upr.GetAllAsync(It.IsAny<FilterDefinition<UserProgress>>(), It.IsAny<Pageable>()))
             .ReturnsAsync([]);
         var userProgressController = new UserProgressController(_mockUserProgressRepository.Object, _mockUserProgressManager.Object);
 
-        IActionResult httpResponse = await userProgressController.GetAllMeAsync(userId: "65c6535e204bb3411f4a4ad9");
+        IActionResult httpResponse = await userProgressController.GetAllMeAsync(userId: "65c6535e204bb3411f4a4ad9", new Pageable());
 
         Assert.IsType<OkObjectResult>(httpResponse);
-        _mockUserProgressRepository.Verify(upr => upr.GetAllAsync(It.IsAny<FilterDefinition<UserProgress>>()), Times.Once);
+        _mockUserProgressRepository.Verify(upr => upr.GetAllAsync(It.IsAny<FilterDefinition<UserProgress>>(), It.IsAny<Pageable>()), Times.Once);
     }
 
     [Fact(DisplayName = nameof(GetMeAsyncShouldReturn404))]
