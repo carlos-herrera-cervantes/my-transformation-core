@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -54,6 +54,10 @@ public class UserProgress
     [BsonElement("updated_at")]
     [JsonProperty(nameof(UpdatedAt))]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonIgnoreIfNull]
+    [JsonProperty(nameof(Exercise), DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public List<Exercise> Exercise { get; set; }
 
     /// <summary>
     /// This method takes a UserProgressUpdate object and maps its properties to the UserProgress object.
