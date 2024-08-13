@@ -23,7 +23,7 @@ public class UserRepository(IMongoClient mongoClient) : IUserRepository
         => await _collection.FindAsync(filter).Result.FirstOrDefaultAsync();
 
     public async Task<IEnumerable<User>> GetAllAsync(FilterDefinition<User> filter)
-        => await _collection.Find(filter).ToListAsync();
+        => await _collection.Find(filter).SortByDescending(u => u.CreatedAt).ToListAsync();
 
     #endregion
 }

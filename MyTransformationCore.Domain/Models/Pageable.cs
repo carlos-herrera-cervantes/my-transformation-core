@@ -12,7 +12,7 @@ public class Pageable
     public int Page { get; set; } = 0;
 
     [FromQuery(Name = "page_size")]
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } = 50;
 
     [FromQuery(Name = "from")]
     public DateTime? From { get; set; }

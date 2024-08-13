@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -54,6 +52,7 @@ public class User
         this.FirstName = userUpdate.FirstName ?? this.FirstName;
         this.LastName = userUpdate.LastName ?? this.LastName;
         this.Birthdate = userUpdate.Birthdate ?? this.Birthdate;
+        this.ProfilePicture = userUpdate.ProfilePicture ?? this.ProfilePicture;
     }
 }
 
@@ -65,5 +64,5 @@ public class UserUpdate
 
     public DateTime? Birthdate { get; set; }
 
-    public IFormFile ProfilePicture { get; set; }
+    public string ProfilePicture { get; set; }
 }
