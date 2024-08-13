@@ -17,7 +17,7 @@ public class ExerciseRepository(IMongoClient mongoClient) : IExerciseRepository
     #region snippet_Methods
 
     public async Task<IEnumerable<Exercise>> GetAllAsync(FilterDefinition<Exercise> filter)
-        => await _collection.Find(filter).ToListAsync();
+        => await _collection.Find(filter).SortByDescending(e => e.CreatedAt).ToListAsync();
 
     public async Task<Exercise> GetAsync(FilterDefinition<Exercise> filter)
         => await _collection.FindAsync(filter).Result.FirstOrDefaultAsync();

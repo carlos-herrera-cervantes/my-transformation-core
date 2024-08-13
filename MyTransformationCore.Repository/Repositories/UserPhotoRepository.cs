@@ -17,7 +17,7 @@ public class UserPhotoRepository(IMongoClient mongoClient) : IUserPhotoRepositor
     #region snippet_Methods
 
     public async Task<IEnumerable<UserPhoto>> GetAllAsync(FilterDefinition<UserPhoto> filter)
-        => await _collection.Find(filter).ToListAsync();
+        => await _collection.Find(filter).SortByDescending(up => up.CreatedAt).ToListAsync();
 
     public async Task<UserPhoto> GetAsync(FilterDefinition<UserPhoto> filter)
         => await _collection.FindAsync(filter).Result.FirstOrDefaultAsync();
