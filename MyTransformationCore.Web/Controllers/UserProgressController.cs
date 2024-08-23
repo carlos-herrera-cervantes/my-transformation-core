@@ -25,7 +25,15 @@ public class UserProgressController(IUserProgressRepository userProgressReposito
 
     [HttpGet("me")]
     public async Task<IActionResult> GetAllMeAsync([FromHeader(Name = "user-id")] string userId, Pageable pageable)
-        => Ok(await _userProgressRepository.GetAllAsync(Builders<UserProgress>.Filter.Eq(up => up.UserId, userId), pageable));
+    {
+        var progress = await _userProgressRepository.GetAllAsync(Builders<UserProgress>.Filter.Eq(up => up.UserId, userId), pageable);
+        var result = progress.Select(p =>
+        {
+            p.Moment = p.Moment.ToLocalTime();
+            return p;
+        });
+        return Ok(result);
+    }
 
     [HttpGet("me/{id}")]
     public async Task<IActionResult> GetMeAsync([FromHeader(Name = "user-id")] string userId, [FromRoute] string id)

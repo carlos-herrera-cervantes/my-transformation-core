@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
+
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -43,7 +43,7 @@ public class UserProgress
     [BsonRepresentation(BsonType.DateTime)]
     [BsonElement("moment")]
     [JsonProperty(nameof(Moment))]
-    public DateTime? Moment { get; set; }
+    public DateTime Moment { get; set; }
 
     [BsonRepresentation(BsonType.DateTime)]
     [BsonElement("created_at")]

@@ -12,7 +12,7 @@ namespace MyTransformationCore.Web.Controllers;
 
 [Route(ApiConfig.BasePath + "/v1/exercise")]
 [ApiController]
-public class ExerciseController(IExerciseRepository exerciseRepository, IExerciseManager exerciseManager, IS3Service s3Service) : ControllerBase
+public class ExerciseController(IExerciseRepository exerciseRepository, IExerciseManager exerciseManager, IS3Service s3Service, ILogger<ExerciseController> logger) : ControllerBase
 {
     #region snippet_Properties
 
@@ -21,6 +21,8 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
     private readonly IExerciseManager _exerciseManager = exerciseManager;
 
     private readonly IS3Service _s3Service = s3Service;
+
+    private readonly ILogger<ExerciseController> _logger = logger;
 
     #endregion
 
@@ -65,12 +67,14 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
 
         var exercise = new Exercise
         {
-            Name = exerciseCreation.Name,
+            Name = exerciseCreation.Name.Trim(),
             Image = exerciseCreation.Image is not null ? $"exercises/{exerciseCreation.Image.FileName}" : AssetsConfig.FallbackExeriseImage,
-            MuscleGroups = exerciseCreation.MuscleGroups
+            MuscleGroups = exerciseCreation.MuscleGroups.Trim()
         };
 
-        await _exerciseManager.CreateAsync(exercise);
+        IActionResult actionResult = await ActionResultOnErrorAsync(_exerciseManager.CreateAsync, exercise);
+
+        if (actionResult is not null) return actionResult;
 
         exercise.Image = imagePath;
 
@@ -117,6 +121,35 @@ public class ExerciseController(IExerciseRepository exerciseRepository, IExercis
         await _exerciseManager.DeleteAsync(Builders<Exercise>.Filter.Eq(e => e.Id, id));
 
         return NoContent();
+    }
+
+    #endregion
+
+    #region snippet_PrivateMethods
+
+    /// <summary>
+    /// This method is used to handle exceptions in the controller.
+    /// </summary>
+    /// <param name="fn">The function that will be executed</param>
+    /// <param name="exercise">Exercise object</param>
+    /// <returns>Http response</returns>
+    private async Task<IActionResult> ActionResultOnErrorAsync(Func<Exercise, Task> fn, Exercise exercise)
+    {
+        try
+        {
+            await fn(exercise);
+        }
+        catch (MongoWriteException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(nameof(ExerciseController) + nameof(fn) + ex);
+            return StatusCode(500, new { Message = "Internal server error" });
+        }
+
+        return null;
     }
 
     #endregion
