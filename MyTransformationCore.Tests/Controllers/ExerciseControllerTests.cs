@@ -12,6 +12,7 @@ using MyTransformationCore.Domain.Configs;
 
 using MongoDB.Driver;
 using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace MyTransformationCore.Tests.Controllers;
 
@@ -29,6 +30,8 @@ public class ExerciseControllerTests
 
     private readonly Mock<IS3Service> _mockS3Service = new();
 
+    private readonly Mock<ILogger<ExerciseController>> _mockLogger = new();
+
     #endregion
 
     #region snippet_Tests
@@ -40,7 +43,12 @@ public class ExerciseControllerTests
             .Setup(er => er.GetAllAsync(It.IsAny<FilterDefinition<Exercise>>()))
             .ReturnsAsync(new List<Exercise>());
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.GetAllAsync();
 
         _mockExerciseRepository.Verify(er => er.GetAllAsync(It.IsAny<FilterDefinition<Exercise>>()), Times.Once);
@@ -55,7 +63,12 @@ public class ExerciseControllerTests
             .Setup(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()))
             .ReturnsAsync(() => null);
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.GetAsync(id: "65ac120d41738783ecbb25ac");
 
         _mockExerciseRepository.Verify(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()), Times.Once);
@@ -63,7 +76,7 @@ public class ExerciseControllerTests
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
-    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(ExerciseControllerTests.GetAsyncShouldReturn200)} - Should return 200 status code")]
+    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(GetAsyncShouldReturn200)} - Should return 200 status code")]
     public async Task GetAsyncShouldReturn200()
     {
         _mockExerciseRepository
@@ -73,7 +86,12 @@ public class ExerciseControllerTests
                 Image = "/images/exercises/default.png"
             });
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.GetAsync(id: "65ac120d41738783ecbb25ac");
 
         _mockExerciseRepository.Verify(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()), Times.Once);
@@ -93,7 +111,12 @@ public class ExerciseControllerTests
                 return $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{rootPath}/{filename}";
             });
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.CreateAsync(new ExerciseCreation
         {
             Name = "Test Exercise",
@@ -113,7 +136,12 @@ public class ExerciseControllerTests
             .Setup(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()))
             .ReturnsAsync(() => null);
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.UpdateAsync(id: "65ac120d41738783ecbb25ac", new ExerciseUpdate());
 
         _mockExerciseRepository.Verify(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()), Times.Once);
@@ -121,7 +149,7 @@ public class ExerciseControllerTests
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
-    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(ExerciseControllerTests.UpdateAsyncShouldReturn200)} - Should return 200 status code")]
+    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(UpdateAsyncShouldReturn200)} - Should return 200 status code")]
     public async Task UpdateAsyncShouldReturn200()
     {
         _mockExerciseRepository
@@ -141,7 +169,12 @@ public class ExerciseControllerTests
                 return $"{S3Config.DefaultEndpoint}/{S3Config.DefaultBucket}/{rootPath}/{filename}";
             });
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.UpdateAsync(id: "65ac120d41738783ecbb25ac", new ExerciseUpdate
         {
             Image = _mockFormFile.Object
@@ -163,7 +196,12 @@ public class ExerciseControllerTests
             .Setup(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()))
             .ReturnsAsync(() => null);
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.DeleteAsync(id: "65ac120d41738783ecbb25ac");
 
         _mockExerciseRepository.Verify(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()), Times.Once);
@@ -171,7 +209,7 @@ public class ExerciseControllerTests
         Assert.IsType<NotFoundObjectResult>(httpResponse);
     }
 
-    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(ExerciseControllerTests.DeleteAsyncShouldReturn204)} - Should return 204 status code")]
+    [Fact(DisplayName = $"{nameof(ExerciseControllerTests)} - {nameof(DeleteAsyncShouldReturn204)} - Should return 204 status code")]
     public async Task DeleteAsyncShouldReturn204()
     {
         _mockExerciseRepository
@@ -185,7 +223,12 @@ public class ExerciseControllerTests
             .Returns(Task.CompletedTask);
         _mockS3Service.Setup(s3s => s3s.DeleteObjectAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
 
-        var exerciseController = new ExerciseController(_mockExerciseRepository.Object, _mockExerciseManager.Object, _mockS3Service.Object);
+        var exerciseController = new ExerciseController(
+            _mockExerciseRepository.Object,
+            _mockExerciseManager.Object,
+            _mockS3Service.Object,
+            _mockLogger.Object
+        );
         IActionResult httpResponse = await exerciseController.DeleteAsync(id: "65ac120d41738783ecbb25ac");
 
         _mockExerciseRepository.Verify(er => er.GetAsync(It.IsAny<FilterDefinition<Exercise>>()), Times.Once);
