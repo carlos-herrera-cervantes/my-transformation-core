@@ -45,5 +45,8 @@ public class UserProgressRepository(IMongoClient mongoClient) : IUserProgressRep
     public async Task<UserProgress> GetAsync(FilterDefinition<UserProgress> filter)
         => await _collection.FindAsync(filter).Result.FirstOrDefaultAsync();
 
+    public async Task<long> CountAsync(FilterDefinition<UserProgress> filter)
+        => await _collection.CountDocumentsAsync(filter);
+
     #endregion
 }

@@ -9,4 +9,6 @@ public interface IUserProgressRepository
     Task<IEnumerable<UserProgress>> GetAllAsync(FilterDefinition<UserProgress> filter, Pageable pageable);
 
     Task<UserProgress> GetAsync(FilterDefinition<UserProgress> filter);
+
+    Task<long> CountAsync(FilterDefinition<UserProgress> filter);
 }

@@ -50,6 +50,21 @@ public class UserProgressController(IUserProgressRepository userProgressReposito
     [HttpPost("me")]
     public async Task<IActionResult> CreateMeAsync([FromHeader(Name = "user-id")] string userId, [FromBody] UserProgressCreation userProgressCreation)
     {
+        var startDay = DateTime.Today.ToUniversalTime();
+        var endDay = startDay.AddDays(1).AddTicks(-1).ToUniversalTime();
+        var momentMatch = Builders<UserProgress>.Filter.And(
+            Builders<UserProgress>.Filter.Gte(up => up.Moment, startDay),
+            Builders<UserProgress>.Filter.Lte(up => up.Moment, endDay)
+        );
+        var exerciseIdMatch = Builders<UserProgress>.Filter.Eq(up => up.ExerciseId, userProgressCreation.ExerciseId);
+        var exerciseCounter = await _userProgressRepository.CountAsync(Builders<UserProgress>.Filter.And(exerciseIdMatch, momentMatch));
+        var exerciseAlreadyExists = exerciseCounter > 0;
+
+        if (exerciseAlreadyExists) return BadRequest(new
+        {
+            Message = $"Exercise: {userProgressCreation.ExerciseId} already exists for the date: {userProgressCreation.Moment}"
+        });
+
         var userProgress = new UserProgress
         {
             UserId = userId,
