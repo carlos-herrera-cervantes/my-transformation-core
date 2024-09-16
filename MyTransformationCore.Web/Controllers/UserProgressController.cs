@@ -57,7 +57,8 @@ public class UserProgressController(IUserProgressRepository userProgressReposito
             Builders<UserProgress>.Filter.Lte(up => up.Moment, endDay)
         );
         var exerciseIdMatch = Builders<UserProgress>.Filter.Eq(up => up.ExerciseId, userProgressCreation.ExerciseId);
-        var exerciseCounter = await _userProgressRepository.CountAsync(Builders<UserProgress>.Filter.And(exerciseIdMatch, momentMatch));
+        var userIdMatch = Builders<UserProgress>.Filter.Eq(up => up.UserId, userId);
+        var exerciseCounter = await _userProgressRepository.CountAsync(Builders<UserProgress>.Filter.And(userIdMatch, exerciseIdMatch, momentMatch));
         var exerciseAlreadyExists = exerciseCounter > 0;
 
         if (exerciseAlreadyExists) return BadRequest(new
